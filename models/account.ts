@@ -1,3 +1,4 @@
+import { ILedger } from './ledger';
 export interface IAccount {
   name: string
   balance: number
@@ -8,7 +9,7 @@ export class Account implements IAccount {
   name: string
   balance: number
   minBalance: number
-  ledger: { date: Date; name: string; amount: number, note?: string }[]
+  ledger: ILedger[]
 
   constructor(account: IAccount) {
     this.name = account.name
@@ -17,11 +18,11 @@ export class Account implements IAccount {
     this.ledger = [{ name: this.name, amount: this.balance, date: new Date()}]
   }
 
-  modBalance(amount: number, date: Date, name: string) {
+  modBalance(amount: number, date: Date, name: string, type?: string) {
     this.balance = this.balance + amount
 
     this.ledger.push({
-      date: date, name: name, amount: this.balance, note: this.checkWarnings()
+      date: date, name: name, amount: this.balance, type: type, note: this.checkWarnings()
     })
   }
 
@@ -50,7 +51,7 @@ export class Account implements IAccount {
       if(e.note) {
         console.log(e.note)
       }
-      console.log(`${e.date.toLocaleDateString()}, ${e.name}, ${this.getPrettyBalance(e.amount)}`)
+      console.log(`${e.date.toLocaleDateString()}, ${e.name}, ${e.type}, ${this.getPrettyBalance(e.amount)}`)
     })
     console.log(`-------------------------------`)
   }

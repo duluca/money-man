@@ -1,0 +1,15 @@
+{
+  "editor.tabSize": 2,
+  "editor.rulers": [120],
+  "files.trimTrailingWhitespace": true,
+  "files.autoSave": "onFocusChange",
+  "files.exclude": {
+      // "node_modules": true,
+      "*_TEMPLATE.md": true,
+      ".idea": true,
+      "**/.git": true,
+      "**/.DS_Store": true,
+      "**/*.js": {"when": "$(basename).ts"},
+      "**/*.js.map": {"when": "$(basename)"}
+  }
+}

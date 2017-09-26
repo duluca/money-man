@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node index"
+    "start": "npm run build && node index",
+    "pretest": "npm run build",
+    "test": "cross-env JASMINE_CONFIG_PATH=./jasmine.json jasmine"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,10 @@
   },
   "homepage": "https://github.com/duluca/money-man#readme",
   "devDependencies": {
+    "@types/jasmine": "^2.6.0",
     "@types/node": "^8.0.30",
+    "cross-env": "^5.0.5",
+    "jasmine": "^2.8.0",
     "typescript": "^2.5.2"
   },
   "dependencies": {

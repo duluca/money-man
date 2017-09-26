@@ -1,6 +1,4 @@
-import { IRecurring, Recurring } from './recur';
-import { IAccount } from './account';
-import * as RRule from 'rrule-alt';
+import { IRecurring, Recurring } from './recur'
 
 export interface IIncome extends IRecurring {
   name: string

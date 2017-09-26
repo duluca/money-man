@@ -1,3 +1,5 @@
+import { compareDates } from './recur';
+import { ILedger } from './ledger';
 import { Payment } from './payment';
 import { Income } from './income';
 import { IAccount, Account } from './account';
@@ -39,7 +41,7 @@ export class Bank {
     var firstDay = new Date(y, m, date.getDate())
     var lastDay = new Date(y, m + 2, 0)
 
-    this.runMonth(firstDay, lastDay)
+    this.runSimulation(firstDay, lastDay)
   }
 
   runNextMonth() {
@@ -49,33 +51,39 @@ export class Bank {
     var firstDay = new Date(y, m, 1)
     var lastDay = new Date(y, m + 1, 0)
 
-    this.runMonth(firstDay, lastDay)
+    this.runSimulation(firstDay, lastDay)
   }
 
-  runMonth(firstDay: Date, lastDay: Date) {
-    let ledger: { date: Date, name: string, amount: number, account: string }[] = []
+  private runSimulation(firstDay: Date, lastDay: Date) {
+    let ledger: ILedger[] = []
 
     this.income.forEach(i => {
       i.getNextDates(firstDay, lastDay).forEach(iDate => {
-        ledger.push({date: iDate, name: i.name, amount: i.amount, account: i.target})
+        ledger.push({date: iDate, name: i.name, amount: i.amount, account: i.target, type: "Income"})
       })
     })
 
     this.payments.forEach(i => {
       i.getNextDates(firstDay, lastDay).forEach(iDate => {
-        ledger.push({date: iDate, name: i.name, amount: -i.amount, account: i.source})
+        ledger.push({date: iDate, name: i.name, amount: -i.amount, account: i.source, type: i.type})
       })
     })
 
     let startDate = new Date(firstDay)
 
     for(let i = startDate; i <= lastDay;startDate.setDate(startDate.getDate() + 1)) {
-      let entries = ledger.filter(e => e.date.toLocaleDateString() === i.toLocaleDateString())
-
-      entries.forEach(element => {
-        let account = this.getAccount(element.account)
-        account.modBalance(element.amount, element.date, element.name)
-      })
+      this.runDay(ledger, i)
     }
+  }
+
+  private runDay(ledger: ILedger[], date: Date) {
+    let entries = ledger.filter(e => compareDates(e.date, date))
+
+    entries.forEach(e => {
+      if(e.account) {
+        let account = this.getAccount(e.account)
+        account.modBalance(e.amount, e.date, e.name, e.type)
+      }
+    })
   }
 }
