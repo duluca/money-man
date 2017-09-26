@@ -8,7 +8,7 @@ async function run() {
   const dataString = await readFileAsync('./data.json', { encoding: 'utf8' })
   const data = JSON.parse(dataString)
 
-  let bank = new Bank(data.accounts, data.income, data.payments)
+  let bank = new Bank(data.accounts, data.recurringEvents)
   bank.runThisMonth()
   bank.printAccounts()
 }

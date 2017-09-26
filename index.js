@@ -16,7 +16,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const dataString = yield readFileAsync('./data.json', { encoding: 'utf8' });
         const data = JSON.parse(dataString);
-        let bank = new bank_1.Bank(data.accounts, data.income, data.payments);
+        let bank = new bank_1.Bank(data.accounts, data.recurringEvents);
         bank.runThisMonth();
         bank.printAccounts();
     });

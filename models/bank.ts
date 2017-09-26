@@ -1,23 +1,26 @@
-import { compareDates } from './recur';
+import { EventType } from './event';
+import { RecurringEvent } from './recurringEvent';
+import { compareDates } from '../utils/dateComparator';
 import { ILedger } from './ledger';
-import { Payment } from './payment';
-import { Income } from './income';
 import { IAccount, Account } from './account';
 export class Bank {
   accounts: Account[]
-  income: Income[]
-  payments: Payment[]
+  recurringEvents: RecurringEvent[]
 
   constructor(accounts: IAccount[],
-    income: {name: string; recurrence: string; amount: number; target: string}[],
-    payments: {name: string; type: string, source: string, recurrence: string; startDate: Date, amount: number}[]) {
+    recurringEvents: {name: string; type: string, source: string,
+      recurrence: string; startDate: Date, amount: number, target: string,
+      category: string}[]) {
     this.accounts = accounts.map(a => new Account(a))
-    this.income = income.map(d => new Income(d.name, d.recurrence, d.amount, d.target))
-    this.payments = payments.map(d => new Payment(d.name, d.type, d.source, d.recurrence, d.startDate, d.amount))
+    this.recurringEvents = recurringEvents.map(d => new RecurringEvent(
+      d.name, d.amount, d.type as any, d.category, d.recurrence, d.startDate,
+      d.source, d.target
+    ))
   }
 
   getAccount(name: string): Account {
-    let found = this.accounts.find(a => a.name.toLowerCase() === name.toLowerCase())
+    let found = this.accounts.find(a => a.name.toLowerCase()
+      === name.toLowerCase())
     if(!found) {
       throw `Account ${name} not found!`
     }
@@ -55,34 +58,40 @@ export class Bank {
   }
 
   private runSimulation(firstDay: Date, lastDay: Date) {
-    let ledger: ILedger[] = []
-
-    this.income.forEach(i => {
-      i.getNextDates(firstDay, lastDay).forEach(iDate => {
-        ledger.push({date: iDate, name: i.name, amount: i.amount, account: i.target, type: "Income"})
-      })
-    })
-
-    this.payments.forEach(i => {
-      i.getNextDates(firstDay, lastDay).forEach(iDate => {
-        ledger.push({date: iDate, name: i.name, amount: -i.amount, account: i.source, type: i.type})
-      })
-    })
+    const ledger =
+      this.recurringEvents
+        .map(re => re.toLedgerArray(firstDay, lastDay))
+        .reduce(re => re)
 
     let startDate = new Date(firstDay)
 
-    for(let i = startDate; i <= lastDay;startDate.setDate(startDate.getDate() + 1)) {
-      this.runDay(ledger, i)
+    for(let currentDay = startDate; currentDay <= lastDay;
+        startDate.setDate(startDate.getDate() + 1)) {
+      this.runDay(ledger, currentDay)
     }
   }
 
-  private runDay(ledger: ILedger[], date: Date) {
-    let entries = ledger.filter(e => compareDates(e.date, date))
+  private runDay(ledger: ILedger[], currentDay: Date) {
+    let entries = ledger.filter(e => compareDates(e.date, currentDay))
 
     entries.forEach(e => {
-      if(e.account) {
-        let account = this.getAccount(e.account)
-        account.modBalance(e.amount, e.date, e.name, e.type)
+      if(e.sourceAccount) {
+        let sourceAccount = this.getAccount(e.sourceAccount)
+
+        switch(e.type) {
+          case EventType.Income:
+            sourceAccount.add(e.amount, e.date, e.type, e.name, e.category)
+            break
+          case EventType.Expenditure:
+            sourceAccount.deduct(e.amount, e.date, e.type, e.name, e.category)
+            break
+          case EventType.Transfer:
+            if(e.targetAccount) {
+              let targetAccount = this.getAccount(e.targetAccount)
+              sourceAccount.deduct(e.amount, e.date, e.type, e.name, e.category)
+              targetAccount.add(e.amount, e.date, e.type, e.name, e.category)
+            }
+        }
       }
     })
   }

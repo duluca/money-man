@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const recur_1 = require("../../models/recur");
+const dateComparator_1 = require("../../utils/dateComparator");
 const dateArrayMatcher = {
     toBeDateArray: function () {
         return {
@@ -8,7 +8,7 @@ const dateArrayMatcher = {
                 let messages = [];
                 let arraysAreSame = true;
                 for (let i = 0; i < actual.length; i++) {
-                    if (!recur_1.compareDates(actual[i], expected[i])) {
+                    if (!dateComparator_1.compareDates(actual[i], expected[i])) {
                         messages.push(`Expected: ${expected[i]} doesn't match Actual: ${actual[i]}`);
                         arraysAreSame = false;
                     }

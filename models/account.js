@@ -1,16 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const event_1 = require("./event");
 class Account {
     constructor(account) {
         this.name = account.name;
         this.balance = account.balance;
         this.minBalance = account.minBalance;
-        this.ledger = [{ name: this.name, amount: this.balance, date: new Date() }];
+        this.accountLedger = [{ name: this.name, amount: this.balance,
+                sourceAccount: this.name, type: event_1.EventType.Balance, date: new Date() }];
     }
-    modBalance(amount, date, name, type) {
+    add(amount, date, type, name, category) {
         this.balance = this.balance + amount;
-        this.ledger.push({
-            date: date, name: name, amount: this.balance, type: type, note: this.checkWarnings()
+        this.modHelper(date, type, name, category);
+    }
+    deduct(amount, date, type, name, category) {
+        this.balance = this.balance - amount;
+        this.modHelper(date, type, name, category);
+    }
+    modHelper(date, type, name, category) {
+        this.accountLedger.push({
+            sourceAccount: this.name,
+            date: date, name: name, amount: this.balance, type: type,
+            category: category, note: this.checkWarnings()
         });
     }
     checkWarnings() {
@@ -26,16 +37,18 @@ class Account {
         return this.getPrettyBalance(this.balance);
     }
     getPrettyBalance(balance) {
-        return balance.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 });
+        return balance.toLocaleString('en-US', { style: 'currency', currency: 'USD',
+            minimumFractionDigits: 2 });
     }
     printLedger() {
         console.log(`Name: ${this.name}`);
         console.log(`-------------------------------`);
-        this.ledger.forEach(e => {
+        this.accountLedger.forEach(e => {
             if (e.note) {
                 console.log(e.note);
             }
-            console.log(`${e.date.toLocaleDateString()}, ${e.name}, ${e.type}, ${this.getPrettyBalance(e.amount)}`);
+            console.log(`${e.date.toLocaleDateString()}, ${e.name}, ${e.type},
+        ${this.getPrettyBalance(e.amount)}`);
         });
         console.log(`-------------------------------`);
     }

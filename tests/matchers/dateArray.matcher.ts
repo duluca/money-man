@@ -1,4 +1,4 @@
-import { compareDates } from '../../models/recur'
+import { compareDates } from '../../utils/dateComparator'
 
 const dateArrayMatcher: jasmine.CustomMatcherFactories =
 {

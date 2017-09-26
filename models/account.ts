@@ -1,4 +1,6 @@
-import { ILedger } from './ledger';
+import { EventType } from './event'
+import { ILedger } from './ledger'
+
 export interface IAccount {
   name: string
   balance: number
@@ -9,20 +11,34 @@ export class Account implements IAccount {
   name: string
   balance: number
   minBalance: number
-  ledger: ILedger[]
+  accountLedger: ILedger[]
 
   constructor(account: IAccount) {
     this.name = account.name
     this.balance = account.balance
     this.minBalance = account.minBalance
-    this.ledger = [{ name: this.name, amount: this.balance, date: new Date()}]
+    this.accountLedger = [{ name: this.name, amount: this.balance,
+      sourceAccount: this.name, type: EventType.Balance, date: new Date()}]
   }
 
-  modBalance(amount: number, date: Date, name: string, type?: string) {
+  add(amount: number, date: Date,
+    type: EventType, name: string, category?: string) {
     this.balance = this.balance + amount
+    this.modHelper(date, type, name, category)
+  }
 
-    this.ledger.push({
-      date: date, name: name, amount: this.balance, type: type, note: this.checkWarnings()
+  deduct(amount: number, date: Date,
+    type: EventType, name: string, category?: string) {
+    this.balance = this.balance - amount
+    this.modHelper(date, type, name, category)
+  }
+
+  private modHelper(date: Date, type: EventType, name: string,
+    category?: string) {
+    this.accountLedger.push({
+      sourceAccount: this.name,
+      date: date, name: name, amount: this.balance, type: type,
+      category: category, note: this.checkWarnings()
     })
   }
 
@@ -41,17 +57,19 @@ export class Account implements IAccount {
   }
 
   private getPrettyBalance(balance: number): string {
-    return balance.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2})
+    return balance.toLocaleString('en-US', { style: 'currency', currency: 'USD',
+      minimumFractionDigits: 2})
   }
 
   printLedger() {
     console.log(`Name: ${this.name}`)
     console.log(`-------------------------------`)
-    this.ledger.forEach(e => {
+    this.accountLedger.forEach(e => {
       if(e.note) {
         console.log(e.note)
       }
-      console.log(`${e.date.toLocaleDateString()}, ${e.name}, ${e.type}, ${this.getPrettyBalance(e.amount)}`)
+      console.log(`${e.date.toLocaleDateString()}, ${e.name}, ${e.type},
+        ${this.getPrettyBalance(e.amount)}`)
     })
     console.log(`-------------------------------`)
   }

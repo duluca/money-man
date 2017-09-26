@@ -3,6 +3,7 @@
 
 ## Features
 - Complex recurring payment scheduling [following RFC 2445 iCalendar spec](http://www.ietf.org/rfc/rfc2445.txt)
+- Factor in US bank holidays when calculating due dates (https://www.npmjs.com/package/@date/business)
 - Custom account support with daily minimum desired and negative balance tracking
 - Custom date range execution for money flow simulation
 
