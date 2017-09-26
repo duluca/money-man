@@ -69,4 +69,16 @@ describe('getNextDates', function() {
     expect(expectedDates.length).toEqual(results.length)
     expect(expectedDates).toBeDateArray(results)
   })
+
+  it('applied date ranges correctly', () => {
+    const rule = RRule.fromString(`FREQ=MONTHLY;COUNT=4;BYMONTHDAY=11`)
+    rule.options.dtstart = new Date('2017-05-01T03:00:00Z')
+
+    const startDate = new Date('2017-03-31T05:00:00Z')
+    const endDate = new Date('2017-12-31T05:00:00Z')
+
+    const results = getNextDates(rule, startDate, endDate)
+
+    expect(4).toEqual(results.length)
+  })
 })
