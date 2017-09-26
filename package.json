@@ -1,0 +1,30 @@
+{
+  "name": "money-man",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duluca/money-man.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/duluca/money-man/issues"
+  },
+  "homepage": "https://github.com/duluca/money-man#readme",
+  "devDependencies": {
+    "@types/node": "^8.0.30",
+    "typescript": "^2.5.2"
+  },
+  "dependencies": {
+    "@date/business": "^0.1.1",
+    "@date/holidays-us": "^0.3.0",
+    "rrule-alt": "^2.2.5"
+  }
+}
