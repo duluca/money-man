@@ -1,0 +1,87 @@
+{
+  "accounts": [
+    {
+      "name": "Checking",
+      "balance": 555.55,
+      "minBalance": 50
+    },
+    {
+      "name": "Savings",
+      "balance": 995.95,
+      "minBalance": 300
+    },
+    {
+      "name": "PiggyBank",
+      "balance": 500.01,
+      "minBalance": 0
+    },
+    {
+      "name": "Credit",
+      "balance": 0,
+      "minBalance": 0
+    }
+  ],
+  "recurringEvents": [
+    {
+      "name": "Acme Co",
+      "recurrence": "FREQ=MONTHLY;BYMONTHDAY=1,15",
+      "amount": 2000,
+      "target": "Checking",
+      "type": "Income"
+    },
+    {
+      "name": "Acme Bank",
+      "type": "Expenditure",
+      "category": "Mortgage",
+      "source": "Savings",
+      "recurrence": "FREQ=MONTHLY;COUNT=360;BYMONTHDAY=11",
+      "startDate": "2017-01-01T05:00:00Z",
+      "amount": 1534.13
+    },
+    {
+      "name": "Acme Bank",
+      "type": "Transfer",
+      "source": "Checking",
+      "target": "Savings",
+      "recurrence": "FREQ=MONTHLY;COUNT=360;BYMONTHDAY=11",
+      "startDate": "2017-01-01T05:00:00Z",
+      "amount": 1534.13
+    },
+    {
+      "name": "Water",
+      "type": "Expenditure",
+      "category": "Utility",
+      "source": "Checking",
+      "recurrence": "FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=15",
+      "startDate": "2017-08-15T05:00:00Z",
+      "amount": 200
+    },
+    {
+      "name": "Gas Nov-Apr",
+      "type": "Expenditure",
+      "category": "Utility",
+      "source": "Checking",
+      "recurrence": "FREQ=YEARLY;BYMONTH=11,12,1,2,3,4;BYMONTHDAY=1",
+      "startDate": "2017-04-03T05:00:00Z",
+      "amount": 100
+    },
+    {
+      "name": "Gas May-Oct",
+      "type": "Expenditure",
+      "category": "Utility",
+      "source": "Checking",
+      "recurrence": "FREQ=YEARLY;BYMONTH=5,6,7,8,9,10;BYMONTHDAY=1",
+      "startDate": "2017-09-01T05:00:00Z",
+      "amount": 50
+    },
+    {
+      "name": "Some subscription",
+      "type": "Expenditure",
+      "category": "Subscriptions",
+      "source": "Credit",
+      "recurrence": "FREQ=MONTHLY;BYMONTHDAY=21",
+      "startDate": "2017-08-15T05:00:00Z",
+      "amount": 9.99
+    }
+  ]
+}

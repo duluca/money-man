@@ -31,15 +31,16 @@ class Bank {
         var lastDay = new Date(y, m + 2, 0);
         this.runSimulation(firstDay, lastDay);
     }
-    runNextMonth() {
+    runNextMonths(n) {
         var date = new Date();
         var y = date.getFullYear();
         var m = date.getMonth() + 1;
-        var firstDay = new Date(y, m, 1);
-        var lastDay = new Date(y, m + 1, 0);
+        var firstDay = new Date(y, m, date.getDate());
+        var lastDay = new Date(y, m + 1 + n, 0);
         this.runSimulation(firstDay, lastDay);
     }
     runSimulation(firstDay, lastDay) {
+        console.log(`Running simulation between ${firstDay.toLocaleDateString()} - ${lastDay.toLocaleDateString()}`);
         const ledger = this.recurringEvents
             .map(re => re.toLedgerArray(firstDay, lastDay))
             .reduce((a, b) => a.concat(b));
@@ -49,22 +50,24 @@ class Bank {
         }
     }
     runDay(ledger, currentDay) {
-        let entries = ledger.filter(e => dateComparator_1.compareDates(e.date, currentDay));
+        let entries = ledger.filter(e => dateComparator_1.compareDates(e.date, currentDay))
+            .sort(e => e.amount || 0);
         entries.forEach(e => {
             if (e.sourceAccount) {
                 let sourceAccount = this.getAccount(e.sourceAccount);
+                let amount = e.amount || 0;
                 switch (e.type) {
                     case event_1.EventType.Income:
-                        sourceAccount.add(e.amount, e.date, e.type, e.name, e.category);
+                        sourceAccount.add(amount, e.date, e.type, e.name, e.category);
                         break;
                     case event_1.EventType.Expenditure:
-                        sourceAccount.deduct(e.amount, e.date, e.type, e.name, e.category);
+                        sourceAccount.deduct(amount, e.date, e.type, e.name, e.category);
                         break;
                     case event_1.EventType.Transfer:
                         if (e.targetAccount) {
                             let targetAccount = this.getAccount(e.targetAccount);
-                            sourceAccount.deduct(e.amount, e.date, e.type, e.name, e.category);
-                            targetAccount.add(e.amount, e.date, e.type, e.name, e.category);
+                            sourceAccount.deduct(amount, e.date, e.type, e.name, e.category);
+                            targetAccount.add(amount, e.date, e.type, e.name, e.category);
                         }
                 }
             }

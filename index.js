@@ -11,13 +11,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const util_1 = require("util");
 const bank_1 = require("./models/bank");
+var program = require('commander');
+program
+    .version('1.0.0')
+    .option('-I, --input <path>', 'Specify relative or absolute input data file path')
+    .option('-M, --months <noOfMonths>', 'Specify number of months to simulate', parseInt)
+    .parse(process.argv);
 const readFileAsync = util_1.promisify(fs.readFile);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const dataString = yield readFileAsync('./data.json', { encoding: 'utf8' });
+        let path = program.input || './data.json';
+        const dataString = yield readFileAsync(path, { encoding: 'utf8' });
         const data = JSON.parse(dataString);
         let bank = new bank_1.Bank(data.accounts, data.recurringEvents);
-        bank.runThisMonth();
+        if (program.months) {
+            bank.runNextMonths(program.months);
+        }
+        else {
+            bank.runThisMonth();
+        }
         bank.printAccounts();
     });
 }

@@ -8,21 +8,21 @@ class Account {
         this.name = account.name;
         this.balance = account.balance;
         this.minBalance = account.minBalance;
-        this.accountLedger = [{ name: this.name, amount: this.balance,
+        this.accountLedger = [{ name: this.name, amount: undefined, runningBalance: this.balance,
                 sourceAccount: this.name, type: event_1.EventType.Balance, date: new Date() }];
     }
     add(amount, date, type, name, category) {
         this.balance = this.balance + amount;
-        this.modHelper(date, type, name, category);
+        this.modHelper(date, type, name, amount, this.balance, category);
     }
     deduct(amount, date, type, name, category) {
         this.balance = this.balance - amount;
-        this.modHelper(date, type, name, category);
+        this.modHelper(date, type, name, -amount, this.balance, category);
     }
-    modHelper(date, type, name, category) {
+    modHelper(date, type, name, amount, balance, category) {
         this.accountLedger.push({
             sourceAccount: this.name,
-            date: date, name: name, amount: this.balance, type: type,
+            date: date, name: name, amount: amount, runningBalance: balance, type: type,
             category: category, note: this.checkWarnings()
         });
     }
@@ -38,13 +38,16 @@ class Account {
     get prettyBalance() {
         return this.getPrettyBalance(this.balance);
     }
-    getPrettyBalance(balance) {
+    getPrettyBalance(balance, isBalance = false) {
+        if (!balance) {
+            return ''.padStart(10).slice(0, 10);
+        }
         let output = balance.toLocaleString('en-US', { style: 'currency', currency: 'USD',
             minimumFractionDigits: 2 }).padStart(10).slice(0, 10);
-        if (balance < 0) {
+        if (isBalance && balance < 0) {
             output = chalk.red(output);
         }
-        else if (balance < this.minBalance) {
+        else if (isBalance && balance < this.minBalance) {
             output = chalk.yellow(output);
         }
         return output;
@@ -58,15 +61,15 @@ class Account {
     printLedger() {
         log(``);
         log(chalk `{bold ${this.name}}`);
-        log(chalk.gray('-------------------------------------------------------------------------------'));
+        log(chalk.gray('-------------------------------------------------------------------------------------------'));
         this.accountLedger.forEach(e => {
             // if(e.note) {
             //   log(e.note)
             // }
             let category = e.category || '';
-            log(chalk `${e.date.toISOString().slice(0, 10)}, {magenta ${event_1.EventType[e.type].padEnd(11).slice(0, 11)}}, {greenBright ${e.name.padEnd(20).slice(0, 20)}}, {green ${category.padEnd(20).slice(0, 20)}}, {bold ${this.getPrettyBalance(e.amount)}}`);
+            log(chalk `${e.date.toISOString().slice(0, 10)}, {magenta ${event_1.EventType[e.type].padEnd(11).slice(0, 11)}}, {greenBright ${e.name.padEnd(20).slice(0, 20)}}, {green ${category.padEnd(20).slice(0, 20)}}, ${this.getPrettyBalance(e.amount)}, {bold ${this.getPrettyBalance(e.runningBalance, true)}}`);
         });
-        log(chalk.gray('-------------------------------------------------------------------------------'));
+        log(chalk.gray('-------------------------------------------------------------------------------------------'));
     }
 }
 exports.Account = Account;

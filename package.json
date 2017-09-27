@@ -31,6 +31,7 @@
     "@date/business": "^0.1.1",
     "@date/holidays-us": "^0.3.0",
     "chalk": "^2.1.0",
+    "commander": "^2.11.0",
     "rrule-alt": "^2.2.5"
   }
 }
