@@ -1,6 +1,10 @@
 import { EventType } from './event'
 import { ILedger } from './ledger'
 
+const chalk = require('chalk')
+const log = console.log
+
+
 export interface IAccount {
   name: string
   balance: number
@@ -44,9 +48,9 @@ export class Account implements IAccount {
 
   private checkWarnings(): string | undefined {
     if (this.balance < 0) {
-      return `NEGATIVE BALANCE!`
+      return chalk`{red NEGATIVE BALANCE!}`
     } else if(this.balance < this.minBalance) {
-      return `BELOW MINIMUM!`
+      return chalk`{yellow BELOW MINIMUM!}`
     }
 
     return undefined
@@ -57,21 +61,40 @@ export class Account implements IAccount {
   }
 
   private getPrettyBalance(balance: number): string {
-    return balance.toLocaleString('en-US', { style: 'currency', currency: 'USD',
-      minimumFractionDigits: 2})
+    let output = balance.toLocaleString('en-US', { style: 'currency', currency: 'USD',
+      minimumFractionDigits: 2}).padStart(10).slice(0, 10)
+
+    if(balance < 0) {
+      output = chalk.red(output)
+    } else if (balance < this.minBalance) {
+      output = chalk.yellow(output)
+    }
+
+    return output
   }
 
+  // private getAccountForPrint(e: ILedger) {
+  //   if(e.targetAccount && e.sourceAccount) {
+  //     return `${e.targetAccount} -> ${e.sourceAccount}`
+  //   }
+
+  //   return e.targetAccount || e.sourceAccount || '--'
+  // }
+
+
   printLedger() {
-    console.log(`Name: ${this.name}`)
-    console.log(`-------------------------------`)
+    log(``)
+    log(chalk`{bold ${this.name}}`)
+    log(chalk.gray('-------------------------------------------------------------------------------'))
     this.accountLedger.forEach(e => {
-      if(e.note) {
-        console.log(e.note)
-      }
-      console.log(`${e.date.toLocaleDateString()}, ${e.name}, ${e.type},
-        ${this.getPrettyBalance(e.amount)}`)
+      // if(e.note) {
+      //   log(e.note)
+      // }
+
+      let category = e.category || ''
+      log(chalk`${e.date.toISOString().slice(0,10)}, {magenta ${EventType[e.type].padEnd(11).slice(0, 11)}}, {greenBright ${e.name.padEnd(20).slice(0, 20)}}, {green ${category.padEnd(20).slice(0, 20)}}, {bold ${this.getPrettyBalance(e.amount)}}`)
     })
-    console.log(`-------------------------------`)
+    log(chalk.gray('-------------------------------------------------------------------------------'))
   }
 
 }

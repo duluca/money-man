@@ -19,14 +19,6 @@
 
 ```json
 {
-  "income": [
-    {
-      "name": "Acme Co",
-      "recurrence": "FREQ=MONTHLY;BYMONTHDAY=1,15",
-      "amount": 2000,
-      "target": "Checking"
-    }
-  ],
   "accounts": [
     {
       "name": "Checking",
@@ -49,18 +41,36 @@
       "minBalance": 0
     }
   ],
-  "payments": [
+  "recurringEvents": [
+    {
+      "name": "Acme Co",
+      "recurrence": "FREQ=MONTHLY;BYMONTHDAY=1,15",
+      "amount": 2000,
+      "target": "Checking",
+      "type": "Income"
+    },
     {
       "name": "Acme Bank",
-      "type": "Mortgage",
+      "type": "Expenditure",
+      "category": "Mortgage",
       "source": "Savings",
       "recurrence": "FREQ=MONTHLY;COUNT=360;BYMONTHDAY=11",
       "startDate": "2017-01-01T05:00:00Z",
       "amount": 1534.13
     },
     {
+      "name": "Acme Bank",
+      "type": "Transfer",
+      "source": "Checking",
+      "target": "Savings",
+      "recurrence": "FREQ=MONTHLY;COUNT=360;BYMONTHDAY=11",
+      "startDate": "2017-01-01T05:00:00Z",
+      "amount": 1534.13
+    },
+    {
       "name": "Water",
-      "type": "Utility",
+      "type": "Expenditure",
+      "category": "Utility",
       "source": "Checking",
       "recurrence": "FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=15",
       "startDate": "2017-08-15T05:00:00Z",
@@ -68,7 +78,8 @@
     },
     {
       "name": "Gas Nov-Apr",
-      "type": "Utility",
+      "type": "Expenditure",
+      "category": "Utility",
       "source": "Checking",
       "recurrence": "FREQ=YEARLY;BYMONTH=11,12,1,2,3,4;BYMONTHDAY=1",
       "startDate": "2017-04-03T05:00:00Z",
@@ -76,7 +87,8 @@
     },
     {
       "name": "Gas May-Oct",
-      "type": "Utility",
+      "type": "Expenditure",
+      "category": "Utility",
       "source": "Checking",
       "recurrence": "FREQ=YEARLY;BYMONTH=5,6,7,8,9,10;BYMONTHDAY=1",
       "startDate": "2017-09-01T05:00:00Z",
@@ -84,7 +96,8 @@
     },
     {
       "name": "Some subscription",
-      "type": "Subscriptions",
+      "type": "Expenditure",
+      "category": "Subscriptions",
       "source": "Credit",
       "recurrence": "FREQ=MONTHLY;BYMONTHDAY=21",
       "startDate": "2017-08-15T05:00:00Z",

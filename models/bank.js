@@ -42,7 +42,7 @@ class Bank {
     runSimulation(firstDay, lastDay) {
         const ledger = this.recurringEvents
             .map(re => re.toLedgerArray(firstDay, lastDay))
-            .reduce(re => re);
+            .reduce((a, b) => a.concat(b));
         let startDate = new Date(firstDay);
         for (let currentDay = startDate; currentDay <= lastDay; startDate.setDate(startDate.getDate() + 1)) {
             this.runDay(ledger, currentDay);

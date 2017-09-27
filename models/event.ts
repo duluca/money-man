@@ -24,20 +24,13 @@ export class Event implements IEvent {
     this.type = EventType[typeName]
   }
 
-  private get getAccountForPrint() {
-    if(this.targetAccount && this.sourceAccount) {
-      return `${this.targetAccount} -> ${this.sourceAccount}`
-    }
-
-    return this.targetAccount || this.sourceAccount || '--'
-  }
-
   toLedger(occuranceDate: Date): ILedger {
     return {
       date: occuranceDate,
       name: this.name,
       amount: this.amount,
-      sourceAccount: this.getAccountForPrint,
+      sourceAccount: this.sourceAccount,
+      targetAccount: this.targetAccount,
       category: this.category,
       type: this.type
     }

@@ -14,7 +14,7 @@
     "url": "git+https://github.com/duluca/money-man.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Doguhan Uluca",
   "license": "GPLv3",
   "bugs": {
     "url": "https://github.com/duluca/money-man/issues"
@@ -30,6 +30,7 @@
   "dependencies": {
     "@date/business": "^0.1.1",
     "@date/holidays-us": "^0.3.0",
+    "chalk": "^2.1.0",
     "rrule-alt": "^2.2.5"
   }
 }

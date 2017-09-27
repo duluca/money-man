@@ -16,18 +16,13 @@ class Event {
         this.targetAccount = targetAccount;
         this.type = EventType[typeName];
     }
-    get getAccountForPrint() {
-        if (this.targetAccount && this.sourceAccount) {
-            return `${this.targetAccount} -> ${this.sourceAccount}`;
-        }
-        return this.targetAccount || this.sourceAccount || '--';
-    }
     toLedger(occuranceDate) {
         return {
             date: occuranceDate,
             name: this.name,
             amount: this.amount,
-            sourceAccount: this.getAccountForPrint,
+            sourceAccount: this.sourceAccount,
+            targetAccount: this.targetAccount,
             category: this.category,
             type: this.type
         };

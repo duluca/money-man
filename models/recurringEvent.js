@@ -8,16 +8,17 @@ class RecurringEvent extends event_1.Event {
         super(name, amount, typeName, category, sourceAccount, targetAccount);
         this.name = name;
         this.amount = amount;
-        this.startDate = startDate;
+        this.recurrenceString = recurrenceString;
         this.sourceAccount = sourceAccount;
         this.targetAccount = targetAccount;
-        this.recurrence = RRule.fromString(recurrenceString);
-        if (this.startDate) {
-            this.recurrence.options.dtstart = this.startDate;
+        if (startDate && startDate instanceof String) {
+            this.startDate = new Date(startDate);
         }
     }
     getNextDates(startDate, endDate) {
-        return scheduler.getNextDates(this.recurrence, startDate, endDate);
+        const rule = RRule.fromString(this.recurrenceString);
+        rule.options.dtstart = this.startDate || startDate;
+        return scheduler.getNextDates(rule, startDate, endDate);
     }
     toLedgerArray(startDate, endDate) {
         return this.getNextDates(startDate, endDate).map(d => this.toLedger(d));
