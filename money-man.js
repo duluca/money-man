@@ -13,14 +13,15 @@ const util_1 = require("util");
 const bank_1 = require("./models/bank");
 var program = require('commander');
 program
-    .version(process.env.npm_package_version)
+    .version('1.0.6')
     .option('-i, --input <path>', 'Specify relative or absolute input data file path')
     .option('-m, --months <noOfMonths>', 'Specify number of months to simulate', parseInt)
     .parse(process.argv);
 const readFileAsync = util_1.promisify(fs.readFile);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        let path = program.input || './data.json';
+        let path = program.input || './sampleData.json';
+        console.log(`Loading file ${path}...`);
         const dataString = yield readFileAsync(path, { encoding: 'utf8' });
         const data = JSON.parse(dataString);
         let bank = new bank_1.Bank(data.accounts, data.recurringEvents);
