@@ -5,35 +5,41 @@ var biz = require('@date/business')({
 })
 
 export function getNextDates(rule: RRule, startDate: Date, endDate: Date, debug = false): Date[] {
-  var resultsToReturn: Date[] = []
+  let result: Date[] = []
   try {
     if(debug) {
       console.log(`Start: ${startDate.toLocaleDateString()} - End: ${endDate.toLocaleDateString()}`)
+      console.log(`Start: ${startDate.toISOString()} - End: ${endDate.toISOString()}`)
     }
-    var result = rule.between(startDate, endDate)
+
+    result = rule.between(startDate, endDate)
     if(debug) {
       console.log(rule.toText())
-      console.log('Found dates:')
+      console.log('Dates to be scheduled:')
       console.log(result)
     }
 
     result = result.map(d => ensureBusinessDay(d))
 
-    result.forEach(r => {
-        if(r && r >= startDate) {
-            resultsToReturn.push(r)
-        }
-    })
-
     if(debug) {
-      console.log('Filtered dates:')
+      console.log('Bank Holiday adjusted dates:')
       console.log(result)
     }
+
+    result.forEach(r => r.setUTCHours(12, 0, 0, 0))
+
+    result = result.filter(r => r && r >= startDate)
+
+    if(debug) {
+      console.log('Dates that are later than start date:')
+      console.log(result)
+    }
+
   } catch (ex) {
     console.log(ex)
   }
 
-  return resultsToReturn
+  return result
 }
 
 function ensureBusinessDay(date: Date) {

@@ -7,7 +7,9 @@
     "build": "tsc",
     "start": "npm run build && node index",
     "pretest": "npm run build",
-    "test": "cross-env JASMINE_CONFIG_PATH=./jasmine.json jasmine"
+    "test": "cross-env JASMINE_CONFIG_PATH=./jasmine.json jasmine",
+    "prepublishOnly": "npm run test",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",

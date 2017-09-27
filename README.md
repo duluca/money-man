@@ -1,19 +1,26 @@
 # money-man
 > A CLI personal financing tool for cash flow simulation, forecasting, budgeting and debt payoff planning
 
+<img width="673" alt="screen shot 2017-09-26 at 11 51 01 pm" src="https://user-images.githubusercontent.com/822159/30895486-91a402c8-a318-11e7-937c-bf694387143f.png">
+
 ## Features
 - Complex recurring payment scheduling [following RFC 2445 iCalendar spec](http://www.ietf.org/rfc/rfc2445.txt)
 - Factor in US bank holidays when calculating due dates (https://www.npmjs.com/package/@date/business)
 - Custom account support with daily minimum desired and negative balance tracking
 - Custom date range execution for money flow simulation
+- Print accounts
 
-## TODO
-- Recurring transfers between accounts
-- Credit card balance, interest rate and minimum payment tracking
-- CSV import/export & Excel templates that graph the exported data
-- Persistant database-based operations and snapshot updates based on user input
-- A UI(unlikely)
-- Live connection to bank account to pull latest balances (very unlikely, unless this becomes a commerical product)
+## CLI Options
+```bash
+  Usage: index [options]
+
+  Options:
+
+    -V, --version              output the version number
+    -I, --input <path>         Specify relative or absolute input data file path
+    -M, --months <noOfMonths>  Specify number of months to simulate
+    -h, --help                 output usage information
+```
 
 ## Sample Input Data
 
@@ -106,3 +113,11 @@
   ]
 }
 ```
+
+## TODO
+- Recurring transfers between accounts
+- Credit card balance, interest rate and minimum payment tracking
+- CSV import/export & Excel templates that graph the exported data
+- Persistant database-based operations and snapshot updates based on user input
+- A UI(unlikely)
+- Live connection to bank account to pull latest balances (very unlikely, unless this becomes a commerical product)

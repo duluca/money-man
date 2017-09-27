@@ -32,7 +32,6 @@ describe('scheduler', function() {
     const expectedDates = [ new Date('2017-03-31T05:00:00Z'), new Date('2017-11-01T05:00:00Z'), new Date('2017-12-01T05:00:00Z')]
 
     const results = scheduler.getNextDates(rule, startDate, endDate)
-
     expect(expectedDates.length).toEqual(results.length)
     expect(expectedDates).toBeDateArray(results)
   })

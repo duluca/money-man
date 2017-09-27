@@ -1,0 +1,4 @@
+tests/
+tsconfig.json
+jasmine.json
+.ts
