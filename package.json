@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "",
   "main": "money-man.js",
-  "bin": "./money-man.js",
+  "bin": "./bin/money-man",
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node money-man",
