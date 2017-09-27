@@ -14,8 +14,8 @@ const bank_1 = require("./models/bank");
 var program = require('commander');
 program
     .version(process.env.npm_package_version)
-    .option('-I, --input <path>', 'Specify relative or absolute input data file path')
-    .option('-M, --months <noOfMonths>', 'Specify number of months to simulate', parseInt)
+    .option('-i, --input <path>', 'Specify relative or absolute input data file path')
+    .option('-m, --months <noOfMonths>', 'Specify number of months to simulate', parseInt)
     .parse(process.argv);
 const readFileAsync = util_1.promisify(fs.readFile);
 function run() {
