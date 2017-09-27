@@ -5,7 +5,7 @@ import { Bank } from "./models/bank"
 var program = require('commander');
 
 program
- .version('1.0.6')
+ .version('1.0.7')
  .option('-i, --input <path>', 'Specify relative or absolute input data file path')
  .option('-m, --months <noOfMonths>', 'Specify number of months to simulate', parseInt)
  .parse(process.argv);

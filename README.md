@@ -3,6 +3,13 @@
 
 <img width="673" alt="screen shot 2017-09-26 at 11 51 01 pm" src="https://user-images.githubusercontent.com/822159/30895486-91a402c8-a318-11e7-937c-bf694387143f.png">
 
+## Install
+- `npm install -g money-man` or
+- `npx money-man`
+- Create your own `data.json` file following the sample below
+- Execute with `money-man -i /path-to-your-own/data.json` to run a month long simulation
+- Execute with `money-man -i /path-to-your-own/data.json -m 12` to run a year long simulation
+
 ## Features
 - Complex recurring payment scheduling [following RFC 2445 iCalendar spec](http://www.ietf.org/rfc/rfc2445.txt)
 - Factor in US bank holidays when calculating due dates (https://www.npmjs.com/package/@date/business)
@@ -12,13 +19,13 @@
 
 ## CLI Options
 ```bash
-  Usage: index [options]
+  Usage: money-man [options]
 
   Options:
 
     -V, --version              output the version number
-    -I, --input <path>         Specify relative or absolute input data file path
-    -M, --months <noOfMonths>  Specify number of months to simulate
+    -i, --input <path>         Specify relative or absolute input data file path
+    -m, --months <noOfMonths>  Specify number of months to simulate
     -h, --help                 output usage information
 ```
 
